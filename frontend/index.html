@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mini Mercado Livre</title>
+
+    <link
+        rel="stylesheet"
+        href="./css/styles.css"
+    >
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div class="container cabecalho-conteudo">
+            <div>
+                <span class="marca-destaque">mini</span>
+
+                <h1>Mercado Livre</h1>
+
+                <p>
+                    Marketplace desenvolvido com FastAPI
+                </p>
+            </div>
+
+            <div
+                id="status-api"
+                class="status status-carregando"
+            >
+                Verificando API...
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="resumo">
+            <article class="card-resumo">
+                <span>Produtos cadastrados</span>
+
+                <strong id="total-produtos">
+                    0
+                </strong>
+            </article>
+
+            <article class="card-resumo">
+                <span>Pedidos realizados</span>
+
+                <strong id="total-pedidos">
+                    0
+                </strong>
+            </article>
+
+            <article class="card-resumo">
+                <span>Itens em estoque</span>
+
+                <strong id="total-estoque">
+                    0
+                </strong>
+            </article>
+        </section>
+
+        <div
+            id="mensagem"
+            class="mensagem oculto"
+        ></div>
+
+        <section class="grid-principal">
+            <article class="painel">
+                <div class="titulo-secao">
+                    <div>
+                        <span class="subtitulo">
+                            Catálogo
+                        </span>
+
+                        <h2 id="titulo-form-produto">
+                            Cadastrar produto
+                        </h2>
+                    </div>
+                </div>
+
+                <form id="form-produto">
+                    <input
+                        type="hidden"
+                        id="produto-id"
+                    >
+
+                    <label for="nome">
+                        Nome do produto
+                    </label>
+
+                    <input
+                        id="nome"
+                        name="nome"
+                        type="text"
+                        minlength="3"
+                        maxlength="100"
+                        placeholder="Ex.: Notebook Gamer"
+                        required
+                    >
+
+                    <div class="campos-lado-a-lado">
+                        <div>
+                            <label for="preco">
+                                Preço
+                            </label>
+
+                            <input
+                                id="preco"
+                                name="preco"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                placeholder="0,00"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label for="estoque">
+                                Estoque
+                            </label>
+
+                            <input
+                                id="estoque"
+                                name="estoque"
+                                type="number"
+                                min="0"
+                                step="1"
+                                placeholder="0"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <div class="acoes-formulario">
+                        <button
+                            type="submit"
+                            class="botao botao-principal"
+                        >
+                            Salvar produto
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelar-edicao"
+                            class="botao botao-secundario oculto"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="painel">
+                <div class="titulo-secao">
+                    <div>
+                        <span class="subtitulo">
+                            Compra
+                        </span>
+
+                        <h2>Criar pedido</h2>
+                    </div>
+                </div>
+
+                <form id="form-pedido">
+                    <label for="pedido-produto">
+                        Produto
+                    </label>
+
+                    <select
+                        id="pedido-produto"
+                        required
+                    >
+                        <option value="">
+                            Selecione um produto
+                        </option>
+                    </select>
+
+                    <label for="quantidade">
+                        Quantidade
+                    </label>
+
+                    <input
+                        id="quantidade"
+                        type="number"
+                        min="1"
+                        step="1"
+                        value="1"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        class="botao botao-compra"
+                    >
+                        Finalizar pedido
+                    </button>
+                </form>
+            </article>
+        </section>
+
+        <section class="painel secao-listagem">
+            <div class="titulo-secao">
+                <div>
+                    <span class="subtitulo">
+                        Disponíveis
+                    </span>
+
+                    <h2>Produtos</h2>
+                </div>
+
+                <button
+                    id="atualizar-produtos"
+                    class="botao botao-secundario"
+                >
+                    Atualizar
+                </button>
+            </div>
+
+            <div
+                id="lista-produtos"
+                class="lista-produtos"
+            ></div>
+        </section>
+
+        <section class="painel secao-listagem">
+            <div class="titulo-secao">
+                <div>
+                    <span class="subtitulo">
+                        Histórico
+                    </span>
+
+                    <h2>Pedidos</h2>
+                </div>
+            </div>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="lista-pedidos"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Mini Mercado Livre com FastAPI, SQLAlchemy e JavaScript
+    </footer>
+
+    <script src="./js/app.js"></script>
+</body>
+</html>

@@ -1,8 +1,11 @@
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.exceptions.estoque_insuficiente import (
     EstoqueInsuficienteError
 )
+from app.exceptions.pedido_not_found import PedidoNotFoundError
+from app.exceptions.produto_not_found import ProdutoNotFoundError
 from app.exceptions.produto_not_found import (
     ProdutoNotFoundError
 )
@@ -59,7 +62,7 @@ class PedidoService:
 
             return pedido_criado
 
-        except Exception:
+        except SQLAlchemyError:
             db.rollback()
             raise
 
@@ -73,8 +76,13 @@ class PedidoService:
         self,
         db: Session,
         pedido_id: int
-    ) -> Pedido | None:
-        return self.pedido_repository.buscar_por_id(
+    ) -> Pedido:
+        pedido = self.pedido_repository.buscar_por_id(
             db,
             pedido_id
         )
+
+        if pedido is None:
+            raise PedidoNotFoundError(pedido_id)
+
+        return pedido

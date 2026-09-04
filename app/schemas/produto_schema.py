@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class CriarProdutoRequest(BaseModel):
@@ -18,6 +18,20 @@ class CriarProdutoRequest(BaseModel):
         ge=0,
         examples=[10]
     )
+
+    @field_validator("nome")
+    @classmethod
+    def validar_nome(cls, nome: str) -> str:
+        nome_normalizado = nome.strip()
+
+        if len(nome_normalizado) < 3:
+            raise ValueError("Nome deve possuir ao menos 3 caracteres")
+
+        return nome_normalizado
+
+
+class AtualizarProdutoRequest(CriarProdutoRequest):
+    pass
 
 
 class ProdutoResponse(BaseModel):

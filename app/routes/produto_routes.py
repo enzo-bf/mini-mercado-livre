@@ -1,9 +1,10 @@
 from fastapi import APIRouter
-from fastapi import Depends
+from fastapi import Depends, status
 from sqlalchemy.orm import Session
 
 from app.dependencies.database import get_db
 from app.schemas.produto_schema import (
+    AtualizarProdutoRequest,
     CriarProdutoRequest,
     ProdutoResponse
 )
@@ -56,3 +57,30 @@ def buscar_produto(
         db,
         produto_id
     )
+
+
+@router.put(
+    "/{produto_id}",
+    response_model=ProdutoResponse
+)
+def atualizar_produto(
+    produto_id: int,
+    request: AtualizarProdutoRequest,
+    db: Session = Depends(get_db)
+):
+    return service.atualizar_produto(
+        db,
+        produto_id,
+        request
+    )
+
+
+@router.delete(
+    "/{produto_id}",
+    status_code=status.HTTP_204_NO_CONTENT
+)
+def excluir_produto(
+    produto_id: int,
+    db: Session = Depends(get_db)
+):
+    service.excluir_produto(db, produto_id)

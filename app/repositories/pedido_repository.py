@@ -31,3 +31,15 @@ class PedidoRepository:
             .filter(Pedido.id == pedido_id)
             .first()
         )
+
+    def existe_por_produto_id(
+        self,
+        db: Session,
+        produto_id: int
+    ) -> bool:
+        return (
+            db.query(Pedido.id)
+            .filter(Pedido.produto_id == produto_id)
+            .first()
+            is not None
+        )

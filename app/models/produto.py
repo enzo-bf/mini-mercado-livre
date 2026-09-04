@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from sqlalchemy import Integer
 from sqlalchemy import Numeric
 from sqlalchemy import String
@@ -23,7 +25,7 @@ class Produto(Base):
         nullable=False
     )
 
-    preco: Mapped[float] = mapped_column(
+    preco: Mapped[Decimal] = mapped_column(
         Numeric(10, 2),
         nullable=False
     )
