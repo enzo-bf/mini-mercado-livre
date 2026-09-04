@@ -1,10 +1,41 @@
 # Mini Mercado Livre
 
-API REST de um marketplace simplificado, desenvolvida com FastAPI para estudo prático de arquitetura Back-End, regras de negócio, persistência de dados e testes automatizados.
+Aplicação web de um marketplace simplificado, desenvolvida com FastAPI, SQLAlchemy, HTML, CSS e JavaScript.
 
-O projeto começa como um monolito organizado em camadas e será evoluído gradualmente para uma arquitetura baseada em microsserviços e mensageria.
+O projeto permite gerenciar produtos e pedidos por meio de uma interface web integrada a uma API REST. A aplicação utiliza arquitetura em camadas, validações, controle de estoque, transações e testes automatizados.
 
+## Tecnologias
+
+### Back-End
+
+- Python
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- SQLite
+- Uvicorn
+
+### Front-End
+
+- HTML5
+- CSS3
+- JavaScript
+- Fetch API
+
+### Testes e ferramentas
+
+- Pytest
+- Git
+- GitHub
 ## Funcionalidades
+### Iniciar o front-end
+
+Mantenha a API em execução e abra um segundo terminal.
+
+Entre na pasta do front-end:
+
+```powershell
+cd frontend
 
 ### Produtos
 
@@ -356,27 +387,6 @@ Resultado esperado:
 20 passed
 ```
 
-## Próximas evoluções
-
-- Implementar atualização e exclusão de produtos
-- Adicionar status aos pedidos
-- Configurar migrations com Alembic
-- Migrar o banco de SQLite para PostgreSQL
-- Adicionar autenticação e autorização
-- Implementar paginação e filtros
-- Adicionar logs estruturados
-- Adicionar observabilidade
-- Implementar RabbitMQ para tarefas assíncronas
-- Publicar eventos com Kafka
-- Separar a aplicação em microsserviços
-- Containerizar os serviços com Docker
-- Configurar integração contínua
-
-## Objetivo educacional
-
-Este projeto foi construído de forma incremental.
-
-A arquitetura começou simples para que novas tecnologias fossem adicionadas somente quando surgisse uma necessidade real, evitando complexidade prematura.
 
 ```text
 Monolito organizado
@@ -393,6 +403,19 @@ Kafka
         ↓
 Microsserviços
 ```
+### Interface web
+
+- Dashboard com resumo de produtos, pedidos e estoque
+- Cadastro de produtos
+- Edição de produtos
+- Exclusão de produtos
+- Criação de pedidos
+- Listagem do histórico de pedidos
+- Atualização automática do estoque
+- Exibição de mensagens de sucesso e erro
+- Layout responsivo
+- Integração com a API utilizando Fetch API
+
 
 ## Autor
 
