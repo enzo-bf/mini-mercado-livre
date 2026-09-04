@@ -358,8 +358,6 @@ Resultado esperado:
 
 ## Próximas evoluções
 
-- Implementar atualização e exclusão de produtos
-- Adicionar status aos pedidos
 - Configurar migrations com Alembic
 - Migrar o banco de SQLite para PostgreSQL
 - Adicionar autenticação e autorização
