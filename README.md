@@ -130,7 +130,7 @@ mini-mercado-livre/
 ### 1. Clonar o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/enzo-bf/mini-mercado-livre.git
 ```
 
 Entre na pasta:
