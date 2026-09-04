@@ -1,0 +1,21 @@
+services:
+
+  postgres:
+    image: postgres:17
+
+    container_name: mini-mercado-db
+
+    environment:
+      POSTGRES_DB: mini_mercado
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  
