@@ -1,14 +1,12 @@
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.database.base import Base
 from app.dependencies.database import get_db
 from app.main import app
-from app.models.pedido import Pedido
-from app.models.produto import Produto
 
 
 TEST_DATABASE_URL = "sqlite://"
@@ -21,6 +19,13 @@ engine_test = create_engine(
     },
     poolclass=StaticPool
 )
+
+
+@event.listens_for(engine_test, "connect")
+def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 
 TestSessionLocal = sessionmaker(
@@ -59,6 +64,8 @@ def client():
         yield test_client
 
     app.dependency_overrides.clear()
+
+
 @pytest.fixture
 def produto_payload():
     return {
@@ -79,10 +86,3 @@ def produto_criado(client, produto_payload):
 
     return response.json()
 
-@pytest.fixture
-def produto_payload():
-    return {
-        "nome": "Notebook Gamer",
-        "preco": 5500.00,
-        "estoque": 10
-    }

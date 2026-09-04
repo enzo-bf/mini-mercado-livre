@@ -1,4 +1,4 @@
 -r requirements.txt
 
 pytest
-httpx2
+httpx

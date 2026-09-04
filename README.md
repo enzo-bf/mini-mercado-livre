@@ -11,8 +11,11 @@ O projeto começa como um monolito organizado em camadas e será evoluído gradu
 - Cadastrar produtos
 - Listar produtos
 - Buscar produto por ID
+- Atualizar produto por ID
+- Excluir produto por ID quando não houver pedidos associados
 - Validar nome, preço e estoque
 - Retornar erro quando o produto não existe
+- Retornar conflito ao excluir produto associado a pedido
 
 ### Pedidos
 
@@ -267,6 +270,31 @@ Resposta esperada:
 
 Depois da criação do pedido, o estoque do produto será reduzido de `10` para `8`.
 
+### Atualizar produto
+
+```http
+PUT /produtos/1
+```
+
+```json
+{
+  "nome": "Notebook Profissional",
+  "preco": 6200.00,
+  "estoque": 15
+}
+```
+
+O PUT exige os três campos do produto e substitui os valores atuais.
+
+### Excluir produto
+
+```http
+DELETE /produtos/1
+```
+
+A API retorna `204 No Content` quando a exclusão é realizada. Produtos associados a
+pedidos não podem ser excluídos e retornam `409 Conflict`.
+
 ### Estoque insuficiente
 
 Se a quantidade solicitada for maior que o estoque disponível, a API retorna:
@@ -301,7 +329,7 @@ Para executar os testes:
 python -m pytest -v
 ```
 
-A suíte atualmente possui 20 casos de teste, incluindo:
+A suíte atualmente possui 27 casos de teste, incluindo:
 
 - Cadastro de produto
 - Listagem de produtos
@@ -317,6 +345,10 @@ A suíte atualmente possui 20 casos de teste, incluindo:
 - Pedido para produto inexistente
 - Garantia de que pedidos recusados não alteram o estoque
 - Garantia de que pedidos recusados não são persistidos
+- Atualização de produto
+- Exclusão de produto
+- Bloqueio de exclusão de produto associado a pedido
+- Busca de pedido inexistente
 
 Resultado esperado:
 

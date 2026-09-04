@@ -1,7 +1,5 @@
 import pytest
 
-from tests.conftest import produto_payload
-
 def test_criar_produto_com_sucesso(client):
     response = client.post(
         "/produtos/",
@@ -132,3 +130,110 @@ def test_criar_produto_retorna_contrato_esperado(
 
     assert float(produto["preco"]) == produto_payload["preco"]
     assert produto["estoque"] == produto_payload["estoque"]
+
+
+def test_atualizar_produto_com_sucesso(client, produto_criado):
+    response = client.put(
+        f"/produtos/{produto_criado['id']}",
+        json={
+            "nome": "Notebook Profissional",
+            "preco": 6200.00,
+            "estoque": 15
+        }
+    )
+
+    assert response.status_code == 200
+    assert response.json()["nome"] == "Notebook Profissional"
+    assert float(response.json()["preco"]) == 6200.00
+    assert response.json()["estoque"] == 15
+
+
+def test_atualizar_produto_inexistente(client):
+    response = client.put(
+        "/produtos/999",
+        json={
+            "nome": "Notebook Profissional",
+            "preco": 6200.00,
+            "estoque": 15
+        }
+    )
+
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Produto com ID 999 não encontrado"
+    }
+
+
+def test_atualizar_produto_com_dados_invalidos(client, produto_criado):
+    response = client.put(
+        f"/produtos/{produto_criado['id']}",
+        json={
+            "nome": "AB",
+            "preco": 0,
+            "estoque": -1
+        }
+    )
+
+    assert response.status_code == 422
+
+    produto = client.get(
+        f"/produtos/{produto_criado['id']}"
+    ).json()
+    assert produto["nome"] == produto_criado["nome"]
+    assert float(produto["preco"]) == float(produto_criado["preco"])
+    assert produto["estoque"] == produto_criado["estoque"]
+
+
+def test_excluir_produto_com_sucesso(client, produto_criado):
+    response = client.delete(
+        f"/produtos/{produto_criado['id']}"
+    )
+
+    assert response.status_code == 204
+    assert response.content == b""
+
+    busca = client.get(
+        f"/produtos/{produto_criado['id']}"
+    )
+    assert busca.status_code == 404
+
+
+def test_excluir_produto_inexistente(client):
+    response = client.delete("/produtos/999")
+
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Produto com ID 999 não encontrado"
+    }
+
+
+def test_nao_excluir_produto_associado_a_pedido(client, produto_criado):
+    pedido = client.post(
+        "/pedidos/",
+        json={
+            "produto_id": produto_criado["id"],
+            "quantidade": 1
+        }
+    )
+    assert pedido.status_code == 201
+
+    response = client.delete(
+        f"/produtos/{produto_criado['id']}"
+    )
+
+    assert response.status_code == 409
+    assert response.json() == {
+        "detail": (
+            f"Produto com ID {produto_criado['id']} está associado a pedidos"
+        )
+    }
+
+    produto = client.get(
+        f"/produtos/{produto_criado['id']}"
+    )
+    assert produto.status_code == 200
+
+    pedidos = client.get("/pedidos/")
+    assert pedidos.status_code == 200
+    assert len(pedidos.json()) == 1
+    assert pedidos.json()[0]["id"] == pedido.json()["id"]

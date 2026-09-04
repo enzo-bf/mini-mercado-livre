@@ -1,3 +1,4 @@
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.models.produto import Produto
@@ -12,8 +13,12 @@ class ProdutoRepository:
     ) -> Produto:
 
         db.add(produto)
-        db.commit()
-        db.refresh(produto)
+        try:
+            db.commit()
+            db.refresh(produto)
+        except SQLAlchemyError:
+            db.rollback()
+            raise
 
         return produto
 
@@ -35,3 +40,25 @@ class ProdutoRepository:
             .filter(Produto.id == produto_id)
             .first()
         )
+
+    def atualizar(
+        self,
+        db: Session,
+        produto: Produto
+    ) -> Produto:
+        db.commit()
+        db.refresh(produto)
+
+        return produto
+
+    def excluir(
+        self,
+        db: Session,
+        produto: Produto
+    ) -> None:
+        try:
+            db.delete(produto)
+            db.commit()
+        except SQLAlchemyError:
+            db.rollback()
+            raise

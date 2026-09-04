@@ -154,6 +154,15 @@ def test_listar_pedidos(client):
     assert pedidos[0]["quantidade"] == 2
 
 
+def test_buscar_pedido_inexistente(client):
+    response = client.get("/pedidos/999")
+
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "Pedido com ID 999 não encontrado"
+    }
+
+
 def test_pedido_pode_consumir_todo_estoque(
     client,
     produto_criado
